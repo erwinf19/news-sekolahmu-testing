@@ -8,4 +8,8 @@ class GlobalConstant {
         const val TOOLBAR_TITLE = "toolbar_title"
         const val TOOLBAR_BACKGROUND_COLOR = "toolbar_background_color"
     }
+
+    object Bundle {
+        const val NEWS_ID = "news_id"
+    }
 }

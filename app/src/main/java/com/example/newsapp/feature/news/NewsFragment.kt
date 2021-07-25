@@ -1,35 +1,38 @@
-package com.example.newsapp.feature.home
+package com.example.newsapp.feature.news
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.newsapp.R
 import com.example.newsapp.base.BaseFragment
-import com.example.newsapp.base.EmptyViewModel
-import com.example.newsapp.databinding.FragmentHomeBinding
-import com.example.newsapp.databinding.FragmentSplashScreenBinding
+import com.example.newsapp.databinding.FragmentNewsBinding
+import com.example.newsapp.databinding.ProgressDialogBinding
 import com.example.newsapp.feature.main.MainActivity
 import com.example.newsapp.model.schema.News
-import java.util.*
-import kotlin.concurrent.schedule
+import com.example.newsapp.utils.GlobalConstant
+import com.example.newsapp.utils.LoadingDialog
+import com.example.newsapp.utils.PreferenceHelper
 
-class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>(), NewsAdapter.HomeListener {
+class NewsFragment : BaseFragment<NewsViewModel, FragmentNewsBinding>(), NewsAdapter.HomeListener {
 
     private val newsAdapter = NewsAdapter()
 
     override fun setViewModel() {
-        mViewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
+        mViewModel = ViewModelProvider(requireActivity()).get(NewsViewModel::class.java)
     }
 
     override fun getViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentHomeBinding =
-        FragmentHomeBinding.inflate(layoutInflater, container, false)
+    ): FragmentNewsBinding =
+        FragmentNewsBinding.inflate(layoutInflater, container, false)
 
     override fun getMainContainer(): View? = null
 
@@ -39,12 +42,23 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>(), NewsAda
         (activity as MainActivity).mViewDataBinding.toolbar.setNavigationOnClickListener {
             (activity as MainActivity).onBackPressed()
         }
+        (activity as MainActivity).loadingDialog.init()
+        pref = PreferenceHelper(requireContext())
         initAdapter()
+        if(!pref.getSync()){
+            (activity as MainActivity).loadingDialog.startLoading()
+        }
         mViewModel.getNews(requireContext(), ::onSuccess, ::onFailed)
     }
 
     override fun onNewsClickListener(data: News) {
-        Log.d("Gson hasil", "KLIK NIH")
+        var bundle : Bundle = Bundle()
+        if(data!=null){
+            if(data.localid!=null){
+                bundle.putString(GlobalConstant.Bundle.NEWS_ID, data.localid)
+                goToFragment(requireActivity().supportFragmentManager, NewsDetailFragment(), bundle, null)
+            }
+        }
     }
 
     fun initAdapter(){
@@ -59,10 +73,11 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>(), NewsAda
     }
 
     fun onSuccess(){
+        (activity as MainActivity).loadingDialog.stopLoading()
         newsAdapter.updateData(mViewModel.news)
     }
 
     fun onFailed(){
-        Log.d("GAGAL", "back to fragment")
+        (activity as MainActivity).loadingDialog.stopLoading()
     }
 }

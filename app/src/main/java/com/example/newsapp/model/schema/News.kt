@@ -9,15 +9,15 @@ import io.realm.annotations.PrimaryKey
 open class News : RealmObject(){
 
     @PrimaryKey
-    var id : String? = null
+    var localid : String? = null
     @SerializedName("title")
     var title : String? = null
+    @SerializedName("abstract")
+    var desc : String? = null
     @SerializedName("section")
     var section : String? = null
     @SerializedName("subsection")
     var subsection : String? = null
-    @SerializedName("abstract")
-    var abstract : String? = null
     @SerializedName("url")
     var url : String? = null
     @SerializedName("byline")

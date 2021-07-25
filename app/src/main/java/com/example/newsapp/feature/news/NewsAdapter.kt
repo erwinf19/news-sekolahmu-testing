@@ -1,5 +1,6 @@
-package com.example.newsapp.feature.home
+package com.example.newsapp.feature.news
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -56,11 +57,19 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.HomeAdapterHolder>() {
         fun bind(news: News) {
             val context = viewBinding.root.context
             viewBinding.tvTitleNews.text = news.title
-            viewBinding.tvAbstract.text = news.abstract
+            var desc = news.desc
+            if(desc!=null){
+                if(desc?.length!! > 30){
+                    desc = desc.substring(0,50)+"..."
+                }
+            }
+
+            viewBinding.tvAbstract.text = desc
             if(news.thumbnail_standard!=null){
                 Glide.with(context)
                         .load(news.thumbnail_standard)
                         .centerCrop()
+                        .placeholder(R.drawable.img_notfound)
                         .into(viewBinding.ivTitleImage)
             }
         }

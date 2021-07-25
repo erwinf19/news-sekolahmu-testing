@@ -4,32 +4,33 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils.replace
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.ColorRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
-import com.example.newsapp.R
-import javax.inject.Inject
+import com.example.newsapp.model.repo.MultimediaRepo
+import com.example.newsapp.model.repo.NewsRepo
+import com.example.newsapp.utils.LoadingDialog
+import com.example.newsapp.utils.PreferenceHelper
+import io.realm.Realm
 
 abstract class BaseActivity<T : BaseViewModel, V : ViewBinding> : AppCompatActivity() {
 
     lateinit var mViewModel: T
-
-//    public var mViewModelFactory: ViewModelProvider.Factory = ViewModelProvider()
-
     private var _mViewDataBinding: V? = null
+    var loadingDialog : LoadingDialog = LoadingDialog(this)
     val mViewDataBinding get() = _mViewDataBinding!!
+    //    public var mViewModelFactory: ViewModelProvider.Factory = ViewModelProvider()
+    lateinit var pref : PreferenceHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _mViewDataBinding = getViewBinding(layoutInflater)
         setViewModel()
+        pref = PreferenceHelper(this)
         setContentView(mViewDataBinding.root)
     }
 
@@ -101,5 +102,6 @@ abstract class BaseActivity<T : BaseViewModel, V : ViewBinding> : AppCompatActiv
     override fun onDestroy() {
         super.onDestroy()
         _mViewDataBinding = null
+        pref.setSync(false)
     }
 }

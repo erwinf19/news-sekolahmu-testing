@@ -9,8 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import com.example.newsapp.R
 import com.example.newsapp.utils.PreferenceHelper
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -20,11 +23,9 @@ abstract class BaseFragment<T : BaseViewModel, V : ViewBinding> : Fragment() {
 //    lateinit var mViewModelFactory: ViewModelProvider.Factory
 
     lateinit var mViewModel: T
-
+    lateinit var pref : PreferenceHelper
     private var _mViewDataBinding: V? = null
     val mViewDataBinding get() = _mViewDataBinding!!
-
-    lateinit var pref : PreferenceHelper
 
     abstract fun setViewModel()
 
@@ -92,5 +93,18 @@ abstract class BaseFragment<T : BaseViewModel, V : ViewBinding> : Fragment() {
         intent.putExtras(bundle)
         activityFragment.setResult(resultCode, intent)
         activityFragment.finish()
+    }
+
+    fun goToFragment(fm : FragmentManager, fragment : Fragment, bundle : Bundle?=null, tag : String?){
+        val fragmentTransaction : FragmentTransaction = fm.beginTransaction()
+        if(bundle != null){
+            fragment.arguments = bundle
+        }
+        if(fragment.isAdded)
+            return
+        fragmentTransaction.replace(R.id.frame_tab, fragment, tag)
+        fragmentTransaction.commit()
+//        if(fm.findFragmentByTag(tag) == null && tag != null)
+        fragmentTransaction.addToBackStack(tag)
     }
 }

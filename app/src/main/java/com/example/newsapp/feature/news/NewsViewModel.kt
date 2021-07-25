@@ -1,19 +1,18 @@
-package com.example.newsapp.feature.home
+package com.example.newsapp.feature.news
 
 import android.content.Context
 import android.util.Log
 import com.example.newsapp.base.BaseViewModel
-import com.example.newsapp.model.action.NewsAction
+import com.example.newsapp.model.repo.NewsRepo
 import com.example.newsapp.model.schema.News
 import com.example.newsapp.rest.param.result.NewsResponse
 import com.example.newsapp.utils.PreferenceHelper
 import com.google.gson.Gson
-import io.realm.Realm
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeViewModel : BaseViewModel() {
+class NewsViewModel : BaseViewModel() {
 
     var news: ArrayList<News>? = null
 
@@ -26,9 +25,15 @@ class HomeViewModel : BaseViewModel() {
 
                     if (response != null) {
                         var body = response.body()
-                        if (body!!.status.equals("OK")) {
-                            news = body!!.results
-                            NewsAction(realm).insertUpdateNews(news!!)
+                        if(body!=null){
+                            if (body.status.equals("OK")) {
+                                var newData = body.results
+                                Log.d("NEWS", "News nih : " + Gson().toJson(newData?.get(0)?.desc))
+                                NewsRepo(realm).insertUpdateNews(newData!!)
+                                news = NewsRepo(realm).getAllNews()
+                                Log.d("NEWS", "News nih : " + Gson().toJson(news?.get(0)?.desc))
+                                pref.setSync(true)
+                            }
                         }
                     }
                     onSuccess()
@@ -39,7 +44,7 @@ class HomeViewModel : BaseViewModel() {
                 }
             })
         } else {
-            news = NewsAction(realm).getAllNews()
+            news = NewsRepo(realm).getAllNews()
             onSuccess()
         }
     }

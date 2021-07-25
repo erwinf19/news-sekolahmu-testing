@@ -1,13 +1,16 @@
-package com.example.newsapp.model.action
+package com.example.newsapp.model.repo
 
-import com.example.newsapp.NewsApp
+import android.util.Log
 import com.example.newsapp.model.schema.Multimedia
 import com.example.newsapp.model.schema.News
 import io.realm.Realm
+import io.realm.RealmList
+import io.realm.RealmResults
+import io.realm.Sort
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MultimediaAction(realm : Realm) {
+class MultimediaRepo(realm : Realm) {
 
     var realm = realm
 
@@ -16,10 +19,16 @@ class MultimediaAction(realm : Realm) {
     }
 
     fun getMultimediaFromNews(newsId : String) : ArrayList<Multimedia>?{
-        var news : News? = realm.where(News::class.java).equalTo("id", newsId).findFirst()
-        if(news!=null){
-            var multimedia : ArrayList<Multimedia> = ArrayList(news.multimedia)
-            return multimedia
+        var multimedia : ArrayList<Multimedia> = ArrayList(realm.where(Multimedia::class.java).equalTo("newsid", newsId).findAll())
+        return multimedia
+    }
+
+    fun getOneMultimediaFromNews(newsId : String) : Multimedia?{
+        Log.d("SAMPE", "CHECK : MASUK NIH")
+        var multimedia : RealmResults<Multimedia> = realm.where(Multimedia::class.java).equalTo("newsid", newsId).sort("width", Sort.DESCENDING).findAll()
+        Log.d("SAMPE", "QUERY")
+        if(multimedia.size>0){
+            return multimedia.get(0)
         }
         return null
     }
@@ -51,6 +60,13 @@ class MultimediaAction(realm : Realm) {
                     newData.copyright = i.copyright
                 }
             }
+        }
+    }
+
+    fun deleteAllMultimedia(){
+        realm.executeTransaction {
+            var data = it.where(Multimedia::class.java).findAll()
+            data.deleteAllFromRealm()
         }
     }
 

@@ -4,17 +4,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.newsapp.R
-import com.example.newsapp.base.BaseActivity
-import com.example.newsapp.base.BaseViewModel
 import com.example.newsapp.base.EmptyViewModel
 import com.example.newsapp.databinding.ActivityMainBinding
-import com.example.newsapp.feature.home.HomeFragment
-import com.example.newsapp.utils.GlobalConstant
+import com.example.newsapp.feature.news.NewsDetailFragment
+import com.example.newsapp.feature.news.NewsFragment
 import id.mufid.android.base.BaseFullStateActivity
 
 class MainActivity : BaseFullStateActivity<EmptyViewModel, ActivityMainBinding>() {
@@ -22,7 +19,7 @@ class MainActivity : BaseFullStateActivity<EmptyViewModel, ActivityMainBinding>(
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(mViewDataBinding.toolbar)
-        openFragment(HomeFragment())
+        openFragment(NewsFragment())
     }
 
     override fun setViewModel() {
@@ -37,7 +34,7 @@ class MainActivity : BaseFullStateActivity<EmptyViewModel, ActivityMainBinding>(
 
     override fun getMainContainer(): View? = null
 
-    private fun openFragment(fragment: Fragment) {
+    fun openFragment(fragment: Fragment) {
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frame_tab, fragment)
         transaction.addToBackStack(null)
@@ -46,11 +43,11 @@ class MainActivity : BaseFullStateActivity<EmptyViewModel, ActivityMainBinding>(
 
     override fun onBackPressed() {
         val fm = supportFragmentManager
-        if (fm.backStackEntryCount > 0) {
-            for (i in 0 until fm.backStackEntryCount) {
-                fm.popBackStack()
-            }
+        Log.d("on backpress", "On backpress = " + fm.backStackEntryCount)
+        if (fm.backStackEntryCount>1) {
+            fm.popBackStack()
+        }else{
+            finish()
         }
-        super.onBackPressed()
     }
 }

@@ -1,11 +1,12 @@
-package com.example.newsapp.model.action
+package com.example.newsapp.model.repo
 
+import android.util.Log
 import com.example.newsapp.model.schema.News
 import io.realm.Realm
 import java.util.*
 import kotlin.collections.ArrayList
 
-class NewsAction(realm : Realm) {
+class NewsRepo(realm : Realm) {
 
     var realm = realm
 
@@ -14,7 +15,7 @@ class NewsAction(realm : Realm) {
     }
 
     fun getNewsFromID(id : String) : News?{
-        return realm.where(News::class.java).equalTo("id", id).findFirst()
+        return realm.where(News::class.java).equalTo("localid", id).findFirst()
     }
 
     fun insertUpdateNews(news : ArrayList<News>){
@@ -23,7 +24,7 @@ class NewsAction(realm : Realm) {
                 //openAPI ga ada ID nya :( jadi di query pake title aja deh
                 val data = it.where(News::class.java).equalTo("title", i.title).findFirst()
                 if (data != null) {
-                    data.abstract = i.abstract
+                    data.desc = i.desc
                     data.section = i.section
                     data.subsection = i.subsection
                     data.byline = i.byline
@@ -32,15 +33,16 @@ class NewsAction(realm : Realm) {
                     data.updated_date = i.updated_date
                     data.item_type = i.item_type
                     data.material_type_facet = i.material_type_facet
+
                     if(i.multimedia!=null){
-                        MultimediaAction(it).insertUpdateMultimedia(data.id!!, ArrayList(i.multimedia))
+                        MultimediaRepo(it).insertUpdateMultimedia(data.localid!!, ArrayList(i.multimedia))
                     }
                 } else {
-                    var new_id : String= UUID.randomUUID().toString();
+                    var new_id : String = UUID.randomUUID().toString()
                     val newData = it.createObject(News::class.java, new_id)
                     newData.title = i.title
-                    newData.abstract = i.abstract
                     newData.section = i.section
+                    newData.desc = i.desc
                     newData.subsection = i.subsection
                     newData.byline = i.byline
                     newData.url = i.url
@@ -49,10 +51,17 @@ class NewsAction(realm : Realm) {
                     newData.item_type = i.item_type
                     newData.material_type_facet = i.material_type_facet
                     if(i.multimedia!=null){
-                        MultimediaAction(it).insertUpdateMultimedia(new_id, ArrayList(i.multimedia))
+                        MultimediaRepo(it).insertUpdateMultimedia(new_id, ArrayList(i.multimedia))
                     }
                 }
             }
+        }
+    }
+
+    fun deleteAllNews(){
+        realm.executeTransaction {
+            var data = it.where(News::class.java).findAll()
+            data.deleteAllFromRealm()
         }
     }
 

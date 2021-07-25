@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">NewsApp</string>
+    <string name="tools_title_news">Raih Perak di Olimpiade Tokyo 2020, Eko Yuli : Saya Minta Maaf</string>
+    <string name="tools_breadcrumb">Sport</string>
+    <string name="tools_reporter">Oleh Erwin Firmansyah pada 25 Jul 2021 18:30 WIB</string>
+    <string name="tools_caption">Marcel Bryant, 60, received a vaccine in Portland, Ore., after learning about a pop-up event.</string>
+    <string name="tools_description">Kurt Korte does not control the waves for the Games’ debut surfing competition. His job is to predict when the best ones will arrive.</string>
+    <string name="loading">Loading..</string>
+
+    <string name="text_reporter">Oleh %1$s pada %2$s</string>
     <string name="empty_string" />
 </resources>
