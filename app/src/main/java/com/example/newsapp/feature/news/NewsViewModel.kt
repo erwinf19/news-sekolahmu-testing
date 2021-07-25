@@ -28,10 +28,8 @@ class NewsViewModel : BaseViewModel() {
                         if(body!=null){
                             if (body.status.equals("OK")) {
                                 var newData = body.results
-                                Log.d("NEWS", "News nih : " + Gson().toJson(newData?.get(0)?.desc))
                                 NewsRepo(realm).insertUpdateNews(newData!!)
                                 news = NewsRepo(realm).getAllNews()
-                                Log.d("NEWS", "News nih : " + Gson().toJson(news?.get(0)?.desc))
                                 pref.setSync(true)
                             }
                         }

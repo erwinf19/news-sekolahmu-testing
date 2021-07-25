@@ -8,9 +8,9 @@
     <application
         android:allowBackup="true"
         android:name=".NewsApp"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/news_logo_header"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/news_logo_header"
         android:supportsRtl="true"
         android:theme="@style/Theme.NewsApp">
         <activity android:name=".feature.splash.SplashActivity">
@@ -20,7 +20,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".feature.main.MainActivity"></activity>
+        <activity android:name=".feature.main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW "/>
+                    <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE "/>
+                <data android:scheme="https" android:host="www.newsappsekolahmu.com"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".base.BaseActivity"></activity>
 
     </application>

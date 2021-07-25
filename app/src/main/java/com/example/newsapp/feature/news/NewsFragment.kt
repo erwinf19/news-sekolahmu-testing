@@ -1,23 +1,17 @@
 package com.example.newsapp.feature.news
 
-import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.newsapp.R
 import com.example.newsapp.base.BaseFragment
 import com.example.newsapp.databinding.FragmentNewsBinding
-import com.example.newsapp.databinding.ProgressDialogBinding
 import com.example.newsapp.feature.main.MainActivity
 import com.example.newsapp.model.schema.News
 import com.example.newsapp.utils.GlobalConstant
-import com.example.newsapp.utils.LoadingDialog
 import com.example.newsapp.utils.PreferenceHelper
 
 class NewsFragment : BaseFragment<NewsViewModel, FragmentNewsBinding>(), NewsAdapter.HomeListener {
@@ -49,6 +43,12 @@ class NewsFragment : BaseFragment<NewsViewModel, FragmentNewsBinding>(), NewsAda
             (activity as MainActivity).loadingDialog.startLoading()
         }
         mViewModel.getNews(requireContext(), ::onSuccess, ::onFailed)
+
+        mViewDataBinding.swipeRefreshLayout.setOnRefreshListener{
+            mViewDataBinding.swipeRefreshLayout.isRefreshing = false
+            pref.setSync(false)
+            mViewModel.getNews(requireContext(), ::onSuccess, ::onFailed)
+        }
     }
 
     override fun onNewsClickListener(data: News) {
@@ -74,10 +74,14 @@ class NewsFragment : BaseFragment<NewsViewModel, FragmentNewsBinding>(), NewsAda
 
     fun onSuccess(){
         (activity as MainActivity).loadingDialog.stopLoading()
+        mViewDataBinding.rvNews.visibility = View.VISIBLE
+        mViewDataBinding.tvNetworkError.visibility = View.GONE
         newsAdapter.updateData(mViewModel.news)
     }
 
     fun onFailed(){
         (activity as MainActivity).loadingDialog.stopLoading()
+        mViewDataBinding.rvNews.visibility = View.GONE
+        mViewDataBinding.tvNetworkError.visibility = View.VISIBLE
     }
 }

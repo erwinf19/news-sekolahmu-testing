@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import com.example.newsapp.R
 
-class LoadingDialog(val activity : Activity) {
+class CustomDialog(val activity : Activity) {
     private lateinit var progressBar : AlertDialog
 
     fun init(){

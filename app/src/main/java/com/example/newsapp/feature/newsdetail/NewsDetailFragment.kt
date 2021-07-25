@@ -1,17 +1,16 @@
 package com.example.newsapp.feature.news
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.newsapp.R
 import com.example.newsapp.base.BaseFragment
-import com.example.newsapp.databinding.FragmentNewsBinding
 import com.example.newsapp.databinding.FragmentNewsDetailBinding
 import com.example.newsapp.feature.main.MainActivity
 import com.example.newsapp.model.schema.Multimedia
@@ -52,10 +51,14 @@ class NewsDetailFragment : BaseFragment<NewsDetailViewModel, FragmentNewsDetailB
         initView(mViewModel.news!!, mViewModel.multimedia)
     }
 
-    fun initView(news : News, multimedia : Multimedia){
+    fun initView(news: News, multimedia: Multimedia){
         mViewDataBinding.tvTitle.text = news.title
         mViewDataBinding.tvBreadcrumb.text = news.section
-        mViewDataBinding.tvReporter.text = getString(R.string.text_reporter, news.byline, news.updated_date)
+        mViewDataBinding.tvReporter.text = getString(
+            R.string.text_reporter,
+            news.byline,
+            news.updated_date
+        )
 
         if(multimedia.url!=null){
             Glide.with(requireContext())
@@ -66,7 +69,10 @@ class NewsDetailFragment : BaseFragment<NewsDetailViewModel, FragmentNewsDetailB
         }
         mViewDataBinding.tvCaption.text = multimedia.caption
         mViewDataBinding.tvDesc.text = news.desc
-        Log.d("abstract", "" + news.desc)
+
+        mViewDataBinding.ivShare.setOnClickListener {
+            Toast.makeText(requireContext(), "Not Implemented Yet", Toast.LENGTH_SHORT).show()
+        }
     }
 
 

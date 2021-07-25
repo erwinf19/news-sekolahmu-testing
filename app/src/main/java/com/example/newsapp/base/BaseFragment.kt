@@ -107,4 +107,12 @@ abstract class BaseFragment<T : BaseViewModel, V : ViewBinding> : Fragment() {
 //        if(fm.findFragmentByTag(tag) == null && tag != null)
         fragmentTransaction.addToBackStack(tag)
     }
+
+    fun shareNews(url : String) {
+        val intent = Intent()
+        intent.setAction(Intent.ACTION_SEND)
+        intent.setType("text/plain")
+        intent.putExtra(Intent.EXTRA_TEXT, url)
+        startActivity(Intent.createChooser(intent, "Share"))
+    }
 }

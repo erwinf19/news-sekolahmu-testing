@@ -1,5 +1,6 @@
 package com.example.newsapp.feature.main
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -43,7 +44,7 @@ class MainActivity : BaseFullStateActivity<EmptyViewModel, ActivityMainBinding>(
 
     override fun onBackPressed() {
         val fm = supportFragmentManager
-        Log.d("on backpress", "On backpress = " + fm.backStackEntryCount)
+
         if (fm.backStackEntryCount>1) {
             fm.popBackStack()
         }else{

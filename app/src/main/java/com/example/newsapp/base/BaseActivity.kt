@@ -11,17 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.viewbinding.ViewBinding
-import com.example.newsapp.model.repo.MultimediaRepo
-import com.example.newsapp.model.repo.NewsRepo
-import com.example.newsapp.utils.LoadingDialog
+import com.example.newsapp.utils.CustomDialog
 import com.example.newsapp.utils.PreferenceHelper
-import io.realm.Realm
 
 abstract class BaseActivity<T : BaseViewModel, V : ViewBinding> : AppCompatActivity() {
 
     lateinit var mViewModel: T
     private var _mViewDataBinding: V? = null
-    var loadingDialog : LoadingDialog = LoadingDialog(this)
+    var loadingDialog : CustomDialog = CustomDialog(this)
     val mViewDataBinding get() = _mViewDataBinding!!
     //    public var mViewModelFactory: ViewModelProvider.Factory = ViewModelProvider()
     lateinit var pref : PreferenceHelper

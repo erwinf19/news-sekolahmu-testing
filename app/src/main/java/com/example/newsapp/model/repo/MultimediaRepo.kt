@@ -24,9 +24,7 @@ class MultimediaRepo(realm : Realm) {
     }
 
     fun getOneMultimediaFromNews(newsId : String) : Multimedia?{
-        Log.d("SAMPE", "CHECK : MASUK NIH")
         var multimedia : RealmResults<Multimedia> = realm.where(Multimedia::class.java).equalTo("newsid", newsId).sort("width", Sort.DESCENDING).findAll()
-        Log.d("SAMPE", "QUERY")
         if(multimedia.size>0){
             return multimedia.get(0)
         }
