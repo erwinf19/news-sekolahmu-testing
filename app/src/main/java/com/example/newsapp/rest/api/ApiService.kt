@@ -8,7 +8,7 @@ import retrofit2.http.GET
 
 interface ApiService {
 
-    @GET("/all/all.json?api-key=" + GlobalConstant.API_KEY)
+    @GET("news/v3/content/all/all.json?api-key=" + GlobalConstant.API_KEY)
     fun getTopNews() : Call<NewsResponse>
 
 }

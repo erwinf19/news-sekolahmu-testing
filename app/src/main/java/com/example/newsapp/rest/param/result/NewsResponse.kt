@@ -4,6 +4,6 @@ import com.example.newsapp.model.schema.News
 
 class NewsResponse : DefaultResponse() {
 
-    var result : List<News>? = null
+    var results : ArrayList<News>? = null
 
 }

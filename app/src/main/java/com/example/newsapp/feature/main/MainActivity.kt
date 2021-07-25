@@ -1,6 +1,7 @@
 package com.example.newsapp.feature.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ class MainActivity : BaseFullStateActivity<EmptyViewModel, ActivityMainBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(mViewDataBinding.toolbar)
         openFragment(HomeFragment())
     }
 
@@ -37,7 +39,18 @@ class MainActivity : BaseFullStateActivity<EmptyViewModel, ActivityMainBinding>(
 
     private fun openFragment(fragment: Fragment) {
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frame_tab, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    override fun onBackPressed() {
+        val fm = supportFragmentManager
+        if (fm.backStackEntryCount > 0) {
+            for (i in 0 until fm.backStackEntryCount) {
+                fm.popBackStack()
+            }
+        }
+        super.onBackPressed()
     }
 }

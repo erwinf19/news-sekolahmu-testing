@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import com.example.newsapp.utils.PreferenceHelper
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -22,6 +23,8 @@ abstract class BaseFragment<T : BaseViewModel, V : ViewBinding> : Fragment() {
 
     private var _mViewDataBinding: V? = null
     val mViewDataBinding get() = _mViewDataBinding!!
+
+    lateinit var pref : PreferenceHelper
 
     abstract fun setViewModel()
 

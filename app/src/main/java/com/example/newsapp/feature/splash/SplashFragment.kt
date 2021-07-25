@@ -29,7 +29,7 @@ class SplashFragment : BaseFragment<EmptyViewModel, FragmentSplashScreenBinding>
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Timer().schedule(5000) {
+        Timer().schedule(3000) {
             startNavigationTo(requireContext(), MainActivity::class.java, requireArguments())
             requireActivity().finish()
         }
