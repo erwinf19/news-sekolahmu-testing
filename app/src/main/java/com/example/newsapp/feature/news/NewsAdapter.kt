@@ -59,7 +59,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.HomeAdapterHolder>() {
             viewBinding.tvTitleNews.text = news.title
             var desc = news.desc
             if(desc!=null){
-                if(desc?.length!! > 30){
+                if(desc?.length!! > 50){
                     desc = desc.substring(0,50)+"..."
                 }
             }
